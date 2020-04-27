@@ -36,20 +36,29 @@ class Graph:
         parents = self.get_neighbors(starting_vertex)
         print("parents: ", parents)
         theP = []
+        print('length of parents array before doing anything:', len(theP))
         for thing in parents:
             theP.append(thing)
+        if len(parents) == 0:
+            theP.append(None)
+            print('if no neighbors to add', theP[0])
+            return theP[0]
         if len(theP) == 1:
             print(theP[0])
             smallest = theP[0]
+            print(smallest)
+            return smallest
         if len(theP) == 2:
             item1 = theP[0]
             item2 = theP[1]
             print(item1, item2)
             if item1 < item2:
                 smallest = item1
+                print("smallest parent: ", smallest)
             else:
                 smallest = item2
-        print("smallest parent: ", smallest)
+                print("smallest parent: ", smallest)
+            return smallest
 
     def bft(self, starting_vertex):
         """

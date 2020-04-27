@@ -12,23 +12,49 @@ from graph import Graph
 
 
 def earliest_ancestor(ancestors, starting_node):
-    print(ancestors, starting_node)
+    print(f"ancestors: {ancestors} \nstarting node: {starting_node}")
     graph_A = Graph()
     for each in graph_A.vertices:
         print(each)
     for i in ancestors:
         graph_A.add_vertex(i[0])
         graph_A.add_vertex(i[1])
-    for each in graph_A.vertices:
+    for each in ancestors:
+        graph_A.add_edge(each[0], each[1])
         print("in graph", each)
-    graph_A.bfs(6, 10)
+    # list = graph_A.bfs(6, 10)
+    # print('list: ', list[-1])
+    # return list[-1]
+    currentV = starting_node
+    print(currentV)
+    # emptySet = set()
+    next_node = graph_A.get_ancestor(starting_node)
+    if next_node == None:
+        return -1
+    while next_node != None:
+        # while currentV != emptySet:
+        next_node = graph_A.get_ancestor(currentV)
+        print(f"next node is: {next_node}")
+        if next_node == None:
+            print(currentV)
+            return currentV
+        tryit = graph_A.get_ancestor(next_node)
+        print("what is ancestor of next node: ", tryit)
+
+        # if tryit != set():
+        print("currentV: ", currentV)
+        currentV = next_node
+        print("in while loop new currentV: ", currentV)
+
+        print(type(currentV))
+    # print("the type of the return: ", type(currentV))
+    print("currentV:", currentV)
+
+    return currentV
 
 
 if __name__ == '__main__':
     testA = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7),
              (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
-    starting_node = 6
+    starting_node = 1
     earliest_ancestor(testA, starting_node)
-
-    for vertex in testA:
-        print(vertex[1], vertex[0])
