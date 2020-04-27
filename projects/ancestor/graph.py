@@ -21,8 +21,8 @@ class Graph:
         """
         Add a directed edge to the graph.
         """
-        if v1 in self.vertices and v2 in self.vertices:
-            self.vertices[v1].add(v2)
+        if v2 in self.vertices and v1 in self.vertices:
+            self.vertices[v2].add(v1)
         else:
             raise IndexError("That vertex does not exist!")
 
@@ -31,6 +31,34 @@ class Graph:
         Get all neighbors (edges) of a vertex.
         """
         return self.vertices[vertex_id]
+
+    def get_ancestor(self, starting_vertex):
+        parents = self.get_neighbors(starting_vertex)
+        # print("parents: ", parents)
+        theP = []
+        # print('length of parents array before doing anything:', len(theP))
+        for thing in parents:
+            theP.append(thing)
+        if len(parents) == 0:
+            theP.append(None)
+            # print('if no neighbors to add', theP[0])
+            return theP[0]
+        if len(theP) == 1:
+            # print(theP[0])
+            smallest = theP[0]
+            # print(smallest)
+            return smallest
+        if len(theP) == 2:
+            item1 = theP[0]
+            item2 = theP[1]
+            # print(item1, item2)
+            if item1 < item2:
+                smallest = item1
+                # print("smallest parent: ", smallest)
+            else:
+                smallest = item2
+                # print("smallest parent: ", smallest)
+            return smallest
 
     def bft(self, starting_vertex):
         """
@@ -81,15 +109,6 @@ class Graph:
                 for neighbor in self.get_neighbors(current_vertex):
                     if neighbor not in visited_vertices:
                         plan_to_visit.push(neighbor)
-
-    def dft_recursive(self, starting_vertex):
-        """
-            Print each vertex in depth-first order
-            beginning from starting_vertex.
-    ​
-            This should be done using recursion.
-            """
-        pass  # TODO
 
     def bfs(self, starting_vertex, destination_vertex):
         """
@@ -158,6 +177,8 @@ class Graph:
                 if current_vertex == destination_vertex:
                     # eg: if the vertex was 6, and we went through 1, 2, 4 to get here, add that to complete the full path
                     updated_path = current_path + [current_vertex]
+                    print(
+                        f"updated path: {updated_path}, last vertex{updated_path[-1]}")
                     return updated_path
 
                 # mark the vertex as visited
@@ -167,15 +188,14 @@ class Graph:
                     updated_path = current_path + [current_vertex]
                     neighbors_to_visit.push((neighbor, updated_path))
 
-    def dfs_recursive(self, starting_vertex, destination_vertex):
-        """
-            Return a list containing a path from
-            starting_vertex to destination_vertex in
-            depth-first order.
-    ​
-            This should be done using recursion.
-            """
-        pass  # TODO
+    # def dfs_ancestor(self, starting_vertex):
+    #     visited_vertices = set()
+
+    #     pc = Queue()
+    #     pc.enqueue([starting_vertex])
+
+    #     while pc.size() > 0:
+    #         current_path = ''
 
 
 if __name__ == '__main__':
@@ -188,22 +208,26 @@ if __name__ == '__main__':
     graph.add_vertex(5)
     graph.add_vertex(6)
     graph.add_vertex(7)
-    graph.add_edge(5, 3)
-    graph.add_edge(6, 3)
-    graph.add_edge(7, 1)
-    graph.add_edge(4, 7)
-    graph.add_edge(1, 2)
-    graph.add_edge(7, 6)
-    graph.add_edge(2, 4)
-    graph.add_edge(3, 5)
+    graph.add_vertex(8)
+    graph.add_vertex(9)
+    graph.add_vertex(10)
+    graph.add_vertex(11)
+    graph.add_edge(1, 3)
     graph.add_edge(2, 3)
-    graph.add_edge(4, 6)
+    graph.add_edge(3, 6)
+    graph.add_edge(5, 6)
+    graph.add_edge(5, 7)
+    graph.add_edge(4, 5)
+    graph.add_edge(4, 8)
+    graph.add_edge(8, 9)
+    graph.add_edge(11, 8)
+    graph.add_edge(10, 1)
 
     '''
         Should print:
             {1: {2}, 2: {3, 4}, 3: {5}, 4: {6, 7}, 5: {3}, 6: {3}, 7: {1, 6}}
         '''
-    print(graph.vertices)
+    print("print vertices: ", graph.vertices)
 
     '''
         Valid BFT paths:
@@ -220,7 +244,7 @@ if __name__ == '__main__':
             1, 2, 4, 3, 7, 6, 5
             1, 2, 4, 3, 7, 5, 6
         '''
-    graph.bft(1)
+    graph.bft(6)
     print("DFT")
 
     '''
@@ -230,14 +254,13 @@ if __name__ == '__main__':
             1, 2, 4, 7, 6, 3, 5
             1, 2, 4, 6, 3, 5, 7
         '''
-    graph.dft(1)
-    graph.dft_recursive(1)
+    graph.dft(6)
 
     '''
         Valid BFS path:
             [1, 2, 4, 6]
         '''
-    print(graph.bfs(1, 6))
+    print(graph.bfs(6, 10))
     print("DFS")
 
     '''
@@ -245,5 +268,7 @@ if __name__ == '__main__':
             [1, 2, 4, 6]
             [1, 2, 4, 7, 6]
         '''
-    print(graph.dfs(1, 6))
-    print(graph.dfs_recursive(1, 6))
+    print(graph.dfs(6, 10))
+
+    print('get ancestor fn')
+    print(graph.get_ancestor(6))

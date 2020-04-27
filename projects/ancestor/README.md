@@ -1,4 +1,4 @@
-# Earliest Ancestor
+  # Earliest Ancestor
 
 This is a take-home coding challenge from a top tech company. The spec is providied verbatim.
 
