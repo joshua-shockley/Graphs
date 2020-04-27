@@ -23,31 +23,19 @@ def earliest_ancestor(ancestors, starting_node):
         graph_A.add_edge(each[0], each[1])
         print("in graph", each)
     # list = graph_A.bfs(6, 10)
-    # print('list: ', list[-1])
     # return list[-1]
     currentV = starting_node
-    print(currentV)
-    # emptySet = set()
+    print(f"starting_node: ", currentV)
     next_node = graph_A.get_ancestor(starting_node)
     if next_node == None:
         return -1
     while next_node != None:
-        # while currentV != emptySet:
         next_node = graph_A.get_ancestor(currentV)
-        print(f"next node is: {next_node}")
         if next_node == None:
-            print(currentV)
+            print(f"furthest known ancestor: ", currentV)
             return currentV
-        tryit = graph_A.get_ancestor(next_node)
-        print("what is ancestor of next node: ", tryit)
-
-        # if tryit != set():
-        print("currentV: ", currentV)
         currentV = next_node
-        print("in while loop new currentV: ", currentV)
 
-        print(type(currentV))
-    # print("the type of the return: ", type(currentV))
     print("currentV:", currentV)
 
     return currentV
@@ -56,5 +44,5 @@ def earliest_ancestor(ancestors, starting_node):
 if __name__ == '__main__':
     testA = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7),
              (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
-    starting_node = 1
+    starting_node = 6
     earliest_ancestor(testA, starting_node)
