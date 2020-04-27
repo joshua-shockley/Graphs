@@ -4,15 +4,15 @@ from ancestor import earliest_ancestor
 
 class Test(unittest.TestCase):
 
-    '''
-       10
-     /
-    1   2   4  11
-     \ /   / \ /
-      3   5   8
-       \ / \   \
-        6   7   9
-    '''
+    # """
+    #    10
+    #  /
+    # 1   2   4  11
+    #  \ /   / \ /
+    #   3   5   8
+    #    \ / \   \
+    #     6   7   9
+    # """
 
     def test_earliest_ancestor(self):
         test_ancestors = [(1, 3), (2, 3), (3, 6), (5, 6),

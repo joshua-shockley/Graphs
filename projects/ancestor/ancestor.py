@@ -21,6 +21,7 @@ def earliest_ancestor(ancestors, starting_node):
         graph_A.add_vertex(i[1])
     for each in graph_A.vertices:
         print("in graph", each)
+    graph_A.bfs(6, 10)
 
 
 if __name__ == '__main__':
@@ -30,4 +31,4 @@ if __name__ == '__main__':
     earliest_ancestor(testA, starting_node)
 
     for vertex in testA:
-        print(vertex[1])
+        print(vertex[1], vertex[0])
