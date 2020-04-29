@@ -1,6 +1,11 @@
+import random
+from util import Queue, Stack
+
+
 class User:
     def __init__(self, name):
         self.name = name
+
 
 class SocialGraph:
     def __init__(self):
@@ -42,11 +47,62 @@ class SocialGraph:
         self.last_id = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLEMENT ME
-
         # Add users
-
+        for i in range(0, num_users):
+            self.add_user(f"User {i}")
         # Create friendships
+        # generate all possible friendship combonations
+        possible_friendships = []
+        # Avoid dulicates by ensuring the first number is smaller than the second
+        for user_id in self.users:
+            for friend_id in range(user_id + 1, self.last_id + 1):
+                # this is a tuple of user and friend connection
+                possible_friendships.append((user_id, friend_id))
+        # shuffle the possible friendships
+        random.shuffle(possible_friendships)
+        # create freindships for the first X pairs of the list
+        # X is determined by the formula: num_user * avg_friendships // 2
+        # need to divide by 2 since each add_friendships() creates 2 friendships
+        for i in range(num_users * avg_friendships // 2):
+            friendship = possible_friendships[i]
+            self.add_friendship(friendship[0], friendship[1])
+
+    def bfs(self, user_id, dest_id):
+        """
+            Return a list containing the shortest path from
+            starting_vertex to destination_vertex in
+            breath-first order.
+            """
+        # create a empty queue, and enqueue a PATH to the starting vertex
+        # create a set for visited vertices
+        visited_vertices = set()
+
+        neighbors_to_visit = Queue()
+        neighbors_to_visit.enqueue([user_id])
+        # while the queue is not empty
+        while neighbors_to_visit.size() > 0:
+            # dequeue the first PATH in the queue
+            current_path = neighbors_to_visit.dequeue()
+            print(f"current_path: {current_path}")
+            # grab the last vertex in the path
+            current_vertex = current_path[-1]
+            # if it hasn't been visited
+            if current_vertex not in visited_vertices:
+                # check if its the target
+                if current_vertex == dest_id:
+                    return current_path
+                    # Return the path
+                # mark it as visited
+                visited_vertices.add(current_vertex)
+                # make new versions of the current path, with each neighbor added to them
+                for next_vertex in self.friendships(current_vertex):
+                    # duplicate the path
+                    new_path = list(current_path)
+                    # add the neighbor
+                    new_path.append(next_vertex)
+                    # add the new path to the queue
+                    neighbors_to_visit.enqueue(new_path)
+    pass  # TODO
 
     def get_all_social_paths(self, user_id):
         """
@@ -59,12 +115,22 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        friends_to_check = Queue()
+        friends_to_check.enqueue(user_id)
+        print("printing whats in friends_to_check:", friends_to_check)
+
+        for user in self.friendships:
+            if user == user_id:
+                print(f"hey it's the user {user} and it equals {user_id}")
+                for friend in self.friendships[user]:
+                    print(user, "is friends with:",  friend)
+
         return visited
 
 
 if __name__ == '__main__':
     sg = SocialGraph()
     sg.populate_graph(10, 2)
-    print(sg.friendships)
+    print("this is the freindships: ", sg.friendships)
     connections = sg.get_all_social_paths(1)
     print(connections)
